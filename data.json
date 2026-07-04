@@ -1,0 +1,29 @@
+{
+  "users": {
+    "nguctu123": {
+      "salt": "e506a5a724f60a4259b75cbdc5bf4da7",
+      "passwordHash": "a065f99e161b2da26e943acc54cd420ee3e3b4c796dc985a9e3904e43c766c4248a630f4b4867866ba372d64c01cf3efd0fb5cf78489db8a614ce7da0d1cf78e",
+      "state": {
+        "points": 0,
+        "streak": 1,
+        "lastActiveDate": "2026-07-04",
+        "courseProgress": {
+          "pt-bac-nhat": 0
+        },
+        "lessonsDone": {
+          "be-thuc": false,
+          "don-thuc": false,
+          "nhan-don-thuc": false,
+          "pt-bac-nhat": false,
+          "an-o-mau": false,
+          "bpt-bac-nhat": false,
+          "he-2an": false
+        },
+        "mastery": {
+          "chuyenve": 0,
+          "rutgon": 0
+        }
+      }
+    }
+  }
+}

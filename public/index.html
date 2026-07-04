@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đường Số — Học toán theo lộ trình</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF7;
+    --grid:#D8E3EC;
+    --grid-strong:#BFD2E3;
+    --ink:#16233F;
+    --ink-soft:#4A5A78;
+    --ink-faint:#8494AC;
+    --teal:#1F8A82;
+    --teal-dark:#146860;
+    --teal-tint:#E4F3F1;
+    --amber:#F2A339;
+    --amber-tint:#FCF0DC;
+    --coral:#E8604C;
+    --coral-tint:#FCE7E3;
+    --surface:#FFFFFF;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(22,35,63,.04), 0 8px 24px -12px rgba(22,35,63,.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ===== Layout shell ===== */
+  .app{display:flex;min-height:100vh;}
+
+  /* ===== Sidebar ===== */
+  .sidebar{
+    width:248px;flex-shrink:0;
+    background:var(--surface);
+    border-right:1px solid var(--grid-strong);
+    display:flex;flex-direction:column;
+    position:sticky;top:0;height:100vh;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    padding:22px 20px 18px;
+  }
+  .brand-mark{width:30px;height:30px;flex-shrink:0;}
+  .brand-name{font-size:19px;font-weight:700;letter-spacing:-.01em;}
+  .brand-name em{font-style:normal;color:var(--teal);}
+
+  .nav{padding:8px 12px;display:flex;flex-direction:column;gap:2px;}
+  .nav-item{
+    display:flex;align-items:center;gap:12px;
+    padding:10px 12px;border-radius:10px;
+    font-size:14.5px;font-weight:500;color:var(--ink-soft);
+    border:none;background:none;width:100%;text-align:left;
+  }
+  .nav-item svg{flex-shrink:0;opacity:.75;}
+  .nav-item:hover{background:var(--paper);color:var(--ink);}
+  .nav-item.active{background:var(--teal-tint);color:var(--teal-dark);}
+  .nav-item.active svg{opacity:1;}
+
+  .nav-divider{height:1px;background:var(--grid-strong);margin:14px 20px;}
+  .nav-label{padding:4px 20px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+
+  .sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid var(--grid-strong);}
+  .streak-card{
+    background:var(--amber-tint);border-radius:12px;padding:12px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .streak-num{font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#B87415;}
+  .streak-label{font-size:11.5px;color:#8A5A15;line-height:1.3;}
+
+  /* ===== Main ===== */
+  .main{flex:1;min-width:0;}
+  .topbar{
+    display:flex;align-items:center;gap:16px;
+    padding:16px 32px;background:rgba(250,250,247,.85);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--grid-strong);
+    position:sticky;top:0;z-index:10;
+  }
+  .search{
+    flex:1;max-width:420px;position:relative;
+  }
+  .search input{
+    width:100%;padding:9px 14px 9px 36px;border-radius:10px;
+    border:1px solid var(--grid-strong);background:var(--surface);
+    font-size:14px;color:var(--ink);outline:none;
+  }
+  .search input:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-tint);}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5;}
+  .topbar-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+  .points{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--teal-dark);background:var(--teal-tint);padding:7px 12px;border-radius:20px;}
+  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;}
+
+  .view{display:none;padding:32px;max-width:1180px;}
+  .view.active{display:block;}
+
+  /* ===== Dashboard hero (signature skill map) ===== */
+  .hero{
+    background:var(--surface);border:1px solid var(--grid-strong);border-radius:20px;
+    padding:28px 28px 12px;margin-bottom:28px;box-shadow:var(--shadow);
+    position:relative;overflow:hidden;
+  }
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:6px;}
+  .hero-eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin:0 0 6px;}
+  .hero-title{font-size:26px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em;}
+  .hero-sub{font-size:14px;color:var(--ink-soft);margin:0;max-width:520px;}
+  .hero-cta{
+    background:var(--ink);color:#fff;border:none;padding:11px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap;
+  }
+  .hero-cta:hover{background:var(--teal-dark);}
+  .skillmap-wrap{overflow-x:auto;padding:10px 0 6px;}
+  .skillmap-legend{display:flex;gap:18px;padding:6px 4px 14px;font-size:12.5px;color:var(--ink-soft);}
+  .legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;}
+
+  /* ===== Grid of cards ===== */
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 14px;}
+  .section-head h2{font-size:18px;font-weight:700;margin:0;}
+  .section-head .see-all{font-size:13px;font-weight:600;color:var(--teal-dark);}
+  .row{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-bottom:34px;}
+
+  .course-card{
+    background:var(--surface);border:1px solid var(--grid-strong);border-radius:16px;
+    padding:18px;transition:transform .12s, box-shadow .12s;
+  }
+  .course-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+  .course-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .course-card h3{font-size:15px;font-weight:600;margin:0 0 4px;}
+  .course-card p{font-size:12.5px;color:var(--ink-faint);margin:0 0 14px;}
+  .progress-track{height:6px;background:var(--grid);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+  .progress-fill{height:100%;border-radius:6px;background:var(--teal);}
+  .progress-text{font-size:11.5px;color:var(--ink-faint);font-family:'JetBrains Mono';}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px;}
+  .stat-card{background:var(--surface);border:1px solid var(--grid-strong);border-radius:16px;padding:18px;}
+  .stat-num{font-family:'Space Grotesk';font-size:26px;font-weight:700;}
+  .stat-label{font-size:12.5px;color:var(--ink-faint);margin-top:2px;}
+
+  /* ===== Lesson view ===== */
+  .lesson-layout{display:grid;grid-template-columns:1fr 300px;gap:24px;}
+  .video-box{
+    background:var(--ink);border-radius:16px;aspect-ratio:16/9;position:relative;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:18px;
+  }
+  .video-box::before{content:'';position:absolute;inset:0;background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 28px);}
+  .play-btn{width:64px;height:64px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;z-index:1;box-shadow:0 8px 24px rgba(31,138,130,.4);}
+  .lesson-title{font-size:22px;font-weight:700;margin:0 0 8px;}
+  .lesson-meta{display:flex;gap:14px;font-size:13px;color:var(--ink-faint);margin-bottom:18px;}
+  .lesson-body{background:var(--surface);border:1px solid var(--grid-strong);border-radius:16px;padding:22px;font-size:14.5px;line-height:1.7;color:var(--ink-soft);}
+  .lesson-body .formula{display:inline-block;background:var(--teal-tint);color:var(--teal-dark);padding:2px 8px;border-radius:6px;font-family:'JetBrains Mono';font-size:13.5px;}
+  .next-cta{margin-top:18px;display:flex;justify-content:flex-end;}
+  .btn-primary{background:var(--teal);color:#fff;border:none;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .btn-primary:hover{background:var(--teal-dark);}
+
+  .playlist{background:var(--surface);border:1px solid var(--grid-strong);border-radius:16px;padding:10px;height:fit-content;}
+  .playlist-head{padding:10px 10px 12px;font-size:13px;font-weight:700;border-bottom:1px solid var(--grid-strong);margin-bottom:6px;}
+  .playlist-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;font-size:13px;}
+  .playlist-item:hover{background:var(--paper);}
+  .playlist-item.current{background:var(--teal-tint);color:var(--teal-dark);font-weight:600;}
+  .check-icon{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .check-done{background:var(--teal);}
+  .check-current{border:2px solid var(--teal);}
+  .check-locked{border:2px solid var(--grid-strong);}
+  .pl-time{margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:var(--ink-faint);}
+
+  /* ===== Practice view ===== */
+  .practice-shell{display:grid;grid-template-columns:1fr 260px;gap:24px;}
+  .practice-card{background:var(--surface);border:1px solid var(--grid-strong);border-radius:20px;padding:32px;}
+  .practice-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .practice-pill{font-size:12px;font-weight:600;color:var(--teal-dark);background:var(--teal-tint);padding:5px 12px;border-radius:20px;}
+  .q-counter{font-family:'JetBrains Mono';font-size:12.5px;color:var(--ink-faint);}
+  .question-text{font-size:19px;font-weight:500;line-height:1.6;margin-bottom:26px;}
+  .question-text .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-family:'JetBrains Mono';margin:0 4px;}
+  .question-text .frac span{padding:0 4px;}
+  .question-text .frac .bar{width:100%;height:1.5px;background:var(--ink);margin:1px 0;}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+  .choice{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;
+    border:1.5px solid var(--grid-strong);font-size:14.5px;background:var(--paper);
+  }
+  .choice:hover{border-color:var(--teal);}
+  .choice.selected{border-color:var(--teal);background:var(--teal-tint);}
+  .choice-letter{width:24px;height:24px;border-radius:7px;background:var(--surface);border:1.5px solid var(--grid-strong);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono';}
+  .choice.selected .choice-letter{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  .practice-actions{display:flex;justify-content:space-between;align-items:center;}
+  .hint-link{font-size:13.5px;font-weight:600;color:var(--ink-faint);display:flex;align-items:center;gap:6px;}
+  .hint-link:hover{color:var(--ink-soft);}
+
+  .practice-side{display:flex;flex-direction:column;gap:16px;}
+  .side-card{background:var(--surface);border:1px solid var(--grid-strong);border-radius:16px;padding:18px;}
+  .side-card h4{margin:0 0 10px;font-size:13px;font-weight:700;}
+  .streak-mini{display:flex;gap:5px;}
+  .streak-dot{flex:1;height:8px;border-radius:4px;background:var(--grid);}
+  .streak-dot.filled{background:var(--amber);}
+  .mastery-ring-row{display:flex;align-items:center;gap:12px;}
+  .mastery-ring-row .label{font-size:13px;color:var(--ink-soft);}
+  .mastery-ring-row .val{margin-left:auto;font-family:'JetBrains Mono';font-weight:600;font-size:13px;}
+
+  .choice.correct{border-color:var(--teal);background:var(--teal-tint);}
+  .choice.correct .choice-letter{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .choice.incorrect{border-color:var(--coral);background:var(--coral-tint);}
+  .choice.incorrect .choice-letter{background:var(--coral);border-color:var(--coral);color:#fff;}
+  .choice.disabled{pointer-events:none;opacity:.85;}
+  .feedback-banner{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:600;margin-bottom:20px;}
+  .feedback-banner.ok{background:var(--teal-tint);color:var(--teal-dark);}
+  .feedback-banner.bad{background:var(--coral-tint);color:#C4462F;}
+  .btn-secondary{background:var(--surface);color:var(--ink);border:1.5px solid var(--grid-strong);padding:11px 20px;border-radius:10px;font-weight:600;font-size:14px;}
+  .btn-secondary:hover{border-color:var(--ink-faint);}
+  .hint-box{background:var(--amber-tint);color:#8A5A15;font-size:13px;padding:12px 14px;border-radius:10px;margin-bottom:18px;display:none;}
+  .hint-box.show{display:block;}
+  .results-wrap{text-align:center;padding:30px 10px;}
+  .results-num{font-family:'Space Grotesk';font-size:48px;font-weight:700;color:var(--teal);}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;font-size:13.5px;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:100;display:flex;align-items:center;gap:8px;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .course-card.filtered-out{display:none;}
+  .lesson-done-badge{background:var(--teal-tint);color:var(--teal-dark);font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
+
+  /* ===== Auth screen ===== */
+  #auth-screen{
+    position:fixed;inset:0;z-index:200;background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .auth-card{
+    width:380px;max-width:90vw;background:var(--surface);border:1px solid var(--grid-strong);
+    border-radius:20px;padding:32px;box-shadow:var(--shadow);
+  }
+  .auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:22px;justify-content:center;}
+  .auth-brand .brand-name{font-size:20px;font-weight:700;}
+  .auth-tabs{display:flex;background:var(--paper);border-radius:10px;padding:4px;margin-bottom:20px;}
+  .auth-tab{flex:1;text-align:center;padding:8px;border:none;background:none;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--ink-faint);}
+  .auth-tab.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);}
+  .auth-field{margin-bottom:14px;}
+  .auth-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .auth-field input{
+    width:100%;padding:11px 13px;border-radius:10px;border:1.5px solid var(--grid-strong);
+    font-size:14px;outline:none;font-family:inherit;background:var(--paper);
+  }
+  .auth-field input:focus{border-color:var(--teal);background:var(--surface);}
+  .auth-submit{width:100%;background:var(--teal);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:600;font-size:14.5px;margin-top:6px;}
+  .auth-submit:hover{background:var(--teal-dark);}
+  .auth-submit:disabled{opacity:.6;cursor:default;}
+  .auth-error{background:var(--coral-tint);color:#C4462F;font-size:13px;padding:10px 12px;border-radius:10px;margin-bottom:14px;display:none;}
+  .auth-error.show{display:block;}
+  .auth-hint{font-size:12px;color:var(--ink-faint);text-align:center;margin-top:16px;line-height:1.5;}
+  .app{display:none;}
+  .app.ready{display:flex;}
+  .logout-btn{font-size:12px;font-weight:600;color:var(--ink-faint);background:none;border:none;padding:4px;}
+  .logout-btn:hover{color:var(--coral);}
+
+  /* ===== Skill tree full view ===== */
+  .tree-legend{display:flex;gap:20px;margin-bottom:18px;font-size:13px;color:var(--ink-soft);}
+  .tree-board{background:var(--surface);border:1px solid var(--grid-strong);border-radius:20px;padding:20px;overflow-x:auto;}
+
+  @media (max-width:960px){
+    .sidebar{display:none;}
+    .lesson-layout,.practice-shell{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= AUTH SCREEN ================= -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+        <circle cx="15" cy="15" r="14" stroke="#1F8A82" stroke-width="1.5"/>
+        <line x1="5" y1="15" x2="25" y2="15" stroke="#1F8A82" stroke-width="1.5"/>
+        <circle cx="9" cy="15" r="2" fill="#1F8A82"/>
+        <circle cx="15" cy="15" r="2" fill="#F2A339"/>
+        <circle cx="21" cy="15" r="2" fill="#E8604C"/>
+      </svg>
+      <div class="brand-name">Đường <em style="font-style:normal;color:#1F8A82;">Số</em></div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-mode="login">Đăng nhập</button>
+      <button class="auth-tab" data-mode="register">Đăng ký</button>
+    </div>
+
+    <div class="auth-error" id="auth-error"></div>
+
+    <form id="auth-form">
+      <div class="auth-field">
+        <label for="auth-username">Tên đăng nhập</label>
+        <input type="text" id="auth-username" autocomplete="username" required minlength="2">
+      </div>
+      <div class="auth-field">
+        <label for="auth-password">Mật khẩu</label>
+        <input type="password" id="auth-password" autocomplete="current-password" required minlength="4">
+      </div>
+      <button type="submit" class="auth-submit" id="auth-submit">Đăng nhập</button>
+    </form>
+    <p class="auth-hint">Dữ liệu học tập của bạn được lưu trên máy chủ cục bộ (file <code>data.json</code>), không mất khi tải lại trang.</p>
+  </div>
+</div>
+
+<div class="app" id="app-shell">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 30 30" fill="none">
+        <circle cx="15" cy="15" r="14" stroke="#1F8A82" stroke-width="1.5"/>
+        <line x1="5" y1="15" x2="25" y2="15" stroke="#1F8A82" stroke-width="1.5"/>
+        <circle cx="9" cy="15" r="2" fill="#1F8A82"/>
+        <circle cx="15" cy="15" r="2" fill="#F2A339"/>
+        <circle cx="21" cy="15" r="2" fill="#E8604C"/>
+      </svg>
+      <div class="brand-name">Đường <em>Số</em></div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Tổng quan
+      </button>
+      <button class="nav-item" data-view="tree">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8 8l3 8M16 8l-3 8"/></svg>
+        Lộ trình kỹ năng
+      </button>
+      <button class="nav-item" data-view="lesson">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M9 9l6 3-6 3V9z" fill="currentColor" stroke="none"/></svg>
+        Bài giảng
+      </button>
+      <button class="nav-item" data-view="practice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Luyện tập
+      </button>
+
+      <div class="nav-divider"></div>
+      <div class="nav-label">Môn học</div>
+      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12l2 2v14l-2-2H6a2 2 0 01-2-2z"/></svg> Số học</button>
+      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l16 16"/></svg> Đại số</button>
+      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 6-9 6-9-6z"/><path d="M3 8v8l9 6 9-6V8"/></svg> Hình học</button>
+      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg> Giải tích</button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="streak-card">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#F2A339"><path d="M12 2c1 4-4 5-4 9a4 4 0 008 0c0-1.5-1-2.5-1-2.5s2 1 2 4.5a5 5 0 01-10 0C7 8 12 6 12 2z"/></svg>
+        <div>
+          <div class="streak-num"><span id="streak-display">12</span><span style="font-size:12px;font-weight:500;color:#B87415;">&nbsp;ngày</span></div>
+          <div class="streak-label">Chuỗi học liên tiếp</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <div class="topbar">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" id="search-input" placeholder="Tìm bài học, dạng bài, chủ đề...">
+      </div>
+      <div class="topbar-right">
+        <div class="points">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#1F8A82"><path d="M12 2l2.6 6.9L22 9.3l-5.6 4.8L18 22l-6-4-6 4 1.6-7.9L2 9.3l7.4-.4z"/></svg>
+          <span id="points-display">2,480</span> điểm
+        </div>
+        <div class="avatar" id="avatar-initials">MT</div>
+        <button class="logout-btn" id="logout-btn" title="Đăng xuất">Đăng xuất</button>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <!-- ============ DASHBOARD VIEW ============ -->
+    <div class="view active" id="view-dashboard">
+
+      <div class="hero">
+        <div class="hero-top">
+          <div>
+            <p class="hero-eyebrow">Lộ trình của bạn</p>
+            <h1 class="hero-title">Đại số cơ bản — Lớp 8</h1>
+            <p class="hero-sub">Bạn đã thành thạo 6/14 kỹ năng. Tiếp tục với "Phương trình bậc nhất một ẩn" để giữ chuỗi học của mình.</p>
+          </div>
+          <button class="hero-cta">
+            Học tiếp
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+
+        <div class="skillmap-wrap">
+          <svg id="skillmap" width="920" height="220" viewBox="0 0 920 220"></svg>
+        </div>
+        <div class="skillmap-legend">
+          <span><span class="legend-dot" style="background:#1F8A82"></span>Đã thành thạo</span>
+          <span><span class="legend-dot" style="background:#F2A339"></span>Đang học</span>
+          <span><span class="legend-dot" style="background:#C7D2DE"></span>Chưa mở khoá</span>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num" style="color:var(--teal)">6</div><div class="stat-label">Kỹ năng thành thạo</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--amber)">3</div><div class="stat-label">Đang luyện tập</div></div>
+        <div class="stat-card"><div class="stat-num mono">89%</div><div class="stat-label">Độ chính xác tuần này</div></div>
+        <div class="stat-card"><div class="stat-num mono">4h 20m</div><div class="stat-label">Thời gian học tuần này</div></div>
+      </div>
+
+      <div class="section-head"><h2>Tiếp tục học</h2><a class="see-all" href="#">Xem tất cả →</a></div>
+      <div class="row" id="course-row">
+        <div class="course-card" data-search="phương trình bậc nhất đại số" data-course="pt-bac-nhat">
+          <div class="course-icon" style="background:var(--teal-tint)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F8A82" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l16 16"/></svg>
+          </div>
+          <h3>Phương trình bậc nhất</h3>
+          <p>Đại số · Lớp 8</p>
+          <div class="progress-track"><div class="progress-fill" id="progress-pt-bac-nhat" style="width:62%"></div></div>
+          <div class="progress-text"><span id="progress-text-pt-bac-nhat">62</span>% hoàn thành</div>
+        </div>
+        <div class="course-card" data-search="định lý pythagoras hình học">
+          <div class="course-icon" style="background:var(--amber-tint)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B87415" stroke-width="2"><path d="M12 2l9 6-9 6-9-6z"/><path d="M3 8v8l9 6 9-6V8"/></svg>
+          </div>
+          <h3>Định lý Pythagoras</h3>
+          <p>Hình học · Lớp 8</p>
+          <div class="progress-track"><div class="progress-fill" style="width:30%;background:var(--amber)"></div></div>
+          <div class="progress-text">30% hoàn thành</div>
+        </div>
+        <div class="course-card" data-search="tỉ lệ thức số học">
+          <div class="course-icon" style="background:var(--coral-tint)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4462F" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 9h.01M9 15c1 1 5 1 6 0"/></svg>
+          </div>
+          <h3>Tỉ lệ thức</h3>
+          <p>Số học · Lớp 8</p>
+          <div class="progress-track"><div class="progress-fill" style="width:10%;background:var(--coral)"></div></div>
+          <div class="progress-text">10% hoàn thành</div>
+        </div>
+        <div class="course-card" data-search="hàm số bậc nhất đại số">
+          <div class="course-icon" style="background:var(--teal-tint)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F8A82" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>
+          </div>
+          <h3>Hàm số bậc nhất</h3>
+          <p>Đại số · Lớp 8</p>
+          <div class="progress-track"><div class="progress-fill" style="width:5%"></div></div>
+          <div class="progress-text">5% hoàn thành</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Đề xuất luyện tập</h2><a class="see-all" href="#">Xem tất cả →</a></div>
+      <div class="row" style="margin-bottom:8px;">
+        <div class="course-card" data-search="luyện tập giải phương trình">
+          <h3>10 câu — Giải phương trình</h3>
+          <p>Ôn lại kỹ năng đã học · ~12 phút</p>
+          <button class="btn-primary start-practice" style="width:100%;justify-content:center;">Bắt đầu</button>
+        </div>
+        <div class="course-card" data-search="kiểm tra tam giác đồng dạng">
+          <h3>Kiểm tra nhanh — Tam giác đồng dạng</h3>
+          <p>5 câu · ~6 phút</p>
+          <button class="btn-primary start-practice" style="width:100%;justify-content:center;background:var(--amber);">Bắt đầu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SKILL TREE VIEW ============ -->
+    <div class="view" id="view-tree">
+      <div class="section-head"><h2>Lộ trình kỹ năng — Đại số cơ bản</h2></div>
+      <div class="tree-legend">
+        <span><span class="legend-dot" style="background:#1F8A82"></span>Thành thạo</span>
+        <span><span class="legend-dot" style="background:#F2A339"></span>Đang học</span>
+        <span><span class="legend-dot" style="background:#C7D2DE"></span>Chưa mở khoá</span>
+      </div>
+      <div class="tree-board">
+        <svg id="skillmap-full" width="1100" height="520" viewBox="0 0 1100 520"></svg>
+      </div>
+    </div>
+
+    <!-- ============ LESSON VIEW ============ -->
+    <div class="view" id="view-lesson">
+      <div class="lesson-layout">
+        <div>
+          <div class="video-box">
+            <div class="play-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <h1 class="lesson-title">Giải phương trình bậc nhất một ẩn</h1>
+          <div class="lesson-meta">
+            <span>⏱ 8 phút</span>
+            <span>📘 Đại số · Bài 4/9</span>
+            <span>🎯 3 mục tiêu học tập</span>
+          </div>
+          <div class="lesson-body">
+            <p>Một phương trình bậc nhất một ẩn có dạng <span class="formula">ax + b = 0</span>, trong đó <span class="formula">a ≠ 0</span>. Để giải, ta chuyển các số hạng chứa ẩn về một vế, hằng số về vế còn lại, rồi chia hai vế cho hệ số của ẩn.</p>
+            <p>Ví dụ: với phương trình <span class="formula">2x + 6 = 14</span>, ta trừ 6 ở hai vế được <span class="formula">2x = 8</span>, sau đó chia hai vế cho 2 để có <span class="formula">x = 4</span>.</p>
+            <p>Hãy chú ý dấu khi chuyển vế — đây là lỗi phổ biến nhất khi mới học dạng toán này.</p>
+          </div>
+          <div class="next-cta" style="gap:10px;">
+            <button class="btn-secondary" id="mark-done-btn">Đánh dấu đã học xong</button>
+            <button class="btn-primary" id="goto-practice-btn">
+              Luyện tập ngay
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="playlist" id="playlist">
+          <div class="playlist-head">Đại số cơ bản · 9 bài</div>
+          <!-- items rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PRACTICE VIEW ============ -->
+    <div class="view" id="view-practice">
+      <div class="practice-shell">
+        <div class="practice-card" id="practice-card"><!-- rendered by JS --></div>
+
+        <div class="practice-side">
+          <div class="side-card">
+            <h4>Chuỗi trả lời đúng</h4>
+            <div class="streak-mini" id="streak-mini"></div>
+          </div>
+          <div class="side-card">
+            <h4>Mức độ thành thạo</h4>
+            <div class="mastery-ring-row"><span class="label">Chuyển vế</span><span class="val" id="mastery-1" style="color:var(--amber)">Đang học</span></div>
+            <div style="height:10px"></div>
+            <div class="mastery-ring-row"><span class="label">Rút gọn phân thức</span><span class="val" style="color:var(--amber)">Đang học</span></div>
+          </div>
+          <div class="side-card">
+            <h4>Ghi chú nhanh</h4>
+            <p id="hint-note" style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;">Nhân hai vế với mẫu số chung trước khi chuyển vế — tránh nhầm dấu.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // =========================================================
+  // COOKIE HELPERS (session token persistence — not localStorage)
+  // =========================================================
+  function setCookie(name, value, days){
+    const maxAge = days*24*60*60;
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; samesite=lax`;
+  }
+  function getCookie(name){
+    const match = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
+    return match ? match[2] : null;
+  }
+  function clearCookie(name){
+    document.cookie = `${name}=; path=/; max-age=0`;
+  }
+
+  let authToken = null;
+
+  async function api(pathName, options={}){
+    const headers = { 'Content-Type':'application/json' };
+    if(authToken) headers['Authorization'] = 'Bearer ' + authToken;
+    const res = await fetch(pathName, { ...options, headers });
+    const data = await res.json().catch(()=> ({}));
+    if(!res.ok) throw new Error(data.error || 'Đã xảy ra lỗi.');
+    return data;
+  }
+
+  // =========================================================
+  // AUTH SCREEN LOGIC
+  // =========================================================
+  let authMode = 'login';
+  const authTabs = document.querySelectorAll('.auth-tab');
+  const authForm = document.getElementById('auth-form');
+  const authError = document.getElementById('auth-error');
+  const authSubmit = document.getElementById('auth-submit');
+  const pwField = document.getElementById('auth-password');
+
+  authTabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      authMode = tab.dataset.mode;
+      authTabs.forEach(t=>t.classList.toggle('active', t===tab));
+      authSubmit.textContent = authMode==='login' ? 'Đăng nhập' : 'Tạo tài khoản';
+      pwField.autocomplete = authMode==='login' ? 'current-password' : 'new-password';
+      authError.classList.remove('show');
+    });
+  });
+
+  authForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    authError.classList.remove('show');
+    const username = document.getElementById('auth-username').value.trim();
+    const password = document.getElementById('auth-password').value;
+    authSubmit.disabled = true;
+    authSubmit.textContent = 'Đang xử lý...';
+    try{
+      const endpoint = authMode==='login' ? '/api/login' : '/api/register';
+      const data = await api(endpoint, { method:'POST', body: JSON.stringify({ username, password }) });
+      authToken = data.token;
+      setCookie('duongso_token', authToken, 7);
+      enterApp(data.username, data.state);
+    }catch(err){
+      authError.textContent = err.message;
+      authError.classList.add('show');
+    }finally{
+      authSubmit.disabled = false;
+      authSubmit.textContent = authMode==='login' ? 'Đăng nhập' : 'Tạo tài khoản';
+    }
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', async ()=>{
+    try{ await api('/api/logout', { method:'POST' }); }catch(e){}
+    authToken = null;
+    clearCookie('duongso_token');
+    document.getElementById('app-shell').classList.remove('ready');
+    document.getElementById('auth-screen').style.display = 'flex';
+  });
+
+  function enterApp(username, serverState){
+    state.points = serverState.points;
+    state.streak = serverState.streak;
+    state.courseProgress = serverState.courseProgress;
+    state.lessonsDone = serverState.lessonsDone;
+    state.mastery = serverState.mastery;
+    document.getElementById('avatar-initials').textContent = username.slice(0,2).toUpperCase();
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-shell').classList.add('ready');
+    refreshHeader();
+    updateCourseProgressUI();
+    renderHeroMap();
+    renderFullTree();
+    renderLesson();
+    showToast('Chào mừng trở lại, '+username+'!');
+  }
+
+  // Try to resume a session from the cookie on load (invoked at bottom of script, after state exists)
+  async function tryResumeSession(){
+    const cookieToken = getCookie('duongso_token');
+    if(!cookieToken) return;
+    authToken = cookieToken;
+    try{
+      const data = await api('/api/me', { method:'GET' });
+      enterApp(data.username, data.state);
+    }catch(err){
+      authToken = null;
+      clearCookie('duongso_token');
+    }
+  }
+
+  // =========================================================
+  // APP STATE
+  // =========================================================
+  const state = {
+    points: 0,
+    streak: 0,
+    courseProgress: { 'pt-bac-nhat': 0 },
+    lessonsDone: { 'be-thuc':false, 'don-thuc':false, 'nhan-don-thuc':false, 'pt-bac-nhat':false, 'an-o-mau':false, 'bpt-bac-nhat':false, 'he-2an':false },
+    mastery: { chuyenve: 0, rutgon: 0 },
+    practice: { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false }
+  };
+
+  const playlistData = [
+    {id:'be-thuc', label:'Biểu thức đại số', time:'6:10'},
+    {id:'don-thuc', label:'Đơn thức, đa thức', time:'7:45'},
+    {id:'nhan-don-thuc', label:'Nhân đơn thức', time:'5:30'},
+    {id:'pt-bac-nhat', label:'Giải phương trình bậc nhất', time:'8:00'},
+    {id:'an-o-mau', label:'Phương trình chứa ẩn ở mẫu', time:'9:15'},
+    {id:'bpt-bac-nhat', label:'Bất phương trình bậc nhất', time:'7:20'},
+    {id:'he-2an', label:'Hệ hai phương trình', time:'10:40'},
+  ];
+
+  const questionBank = [
+    {
+      html:'Giải phương trình sau và chọn nghiệm đúng: <br><br><span class="mono" style="font-size:20px;">3x − 5 = 2x + 7</span>',
+      choices:['x = 6','x = 9','x = 12','x = 2'],
+      correct:2,
+      hint:'Chuyển 2x sang vế trái và −5 sang vế phải: 3x − 2x = 7 + 5.'
+    },
+    {
+      html:'Tìm nghiệm của phương trình: <br><br><span class="mono" style="font-size:20px;">2(x − 3) = 4x − 10</span>',
+      choices:['x = 1','x = 2','x = 3','x = 4'],
+      correct:1,
+      hint:'Khai triển vế trái trước: 2x − 6 = 4x − 10, rồi chuyển vế.'
+    },
+    {
+      html:'Giải phương trình: <br><br><span class="mono" style="font-size:20px;">5x + 4 = 2x + 19</span>',
+      choices:['x = 3','x = 5','x = 7','x = 9'],
+      correct:1,
+      hint:'Chuyển 2x sang trái, 4 sang phải rồi chia cho hệ số của x.'
+    },
+    {
+      html:'Tìm x biết: <br><br><span class="mono" style="font-size:20px;">7 − 2x = 3x − 8</span>',
+      choices:['x = 1','x = 2','x = 3','x = 4'],
+      correct:2,
+      hint:'Cộng 2x vào hai vế, sau đó cộng 8 vào hai vế.'
+    },
+    {
+      html:'Giải phương trình: <br><br><span class="mono" style="font-size:20px;">4(x + 1) = 2x + 10</span>',
+      choices:['x = 1','x = 2','x = 3','x = 4'],
+      correct:0,
+      hint:'Khai triển: 4x + 4 = 2x + 10, rồi chuyển vế và rút gọn.'
+    }
+  ];
+
+  // =========================================================
+  // TOAST
+  // =========================================================
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  function refreshHeader(){
+    document.getElementById('points-display').textContent = state.points.toLocaleString('vi-VN');
+    document.getElementById('streak-display').textContent = state.streak;
+  }
+
+  // =========================================================
+  // VIEW SWITCHING
+  // =========================================================
+  const navItems = document.querySelectorAll('.nav-item[data-view]');
+  function goToView(name){
+    navItems.forEach(b=>b.classList.toggle('active', b.dataset.view===name));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    if(name==='lesson') renderLesson();
+    if(name==='practice') renderPractice();
+    if(name==='tree') renderFullTree();
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  navItems.forEach(btn=> btn.addEventListener('click', ()=> goToView(btn.dataset.view)));
+
+  document.querySelectorAll('.start-practice').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      state.practice = { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false };
+      goToView('practice');
+    });
+  });
+  document.getElementById('goto-practice-btn').addEventListener('click', ()=> goToView('practice'));
+
+  // =========================================================
+  // SEARCH FILTER (dashboard course cards)
+  // =========================================================
+  document.getElementById('search-input').addEventListener('input', (e)=>{
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('#course-row .course-card, .row .course-card').forEach(card=>{
+      const hay = (card.dataset.search || card.textContent).toLowerCase();
+      card.classList.toggle('filtered-out', q.length>0 && !hay.includes(q));
+    });
+  });
+
+  // =========================================================
+  // LESSON VIEW
+  // =========================================================
+  function renderLesson(){
+    const wrap = document.getElementById('playlist');
+    wrap.innerHTML = '<div class="playlist-head">Đại số cơ bản · '+playlistData.length+' bài</div>';
+    let reachedLocked = false;
+    playlistData.forEach((item, i)=>{
+      const done = state.lessonsDone[item.id];
+      const isCurrent = item.id==='pt-bac-nhat';
+      let iconClass, iconInner='';
+      if(done){ iconClass='check-done'; iconInner='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M4 12l6 6L20 6"/></svg>'; }
+      else if(isCurrent){ iconClass='check-current'; }
+      else { iconClass='check-locked'; }
+
+      const row = document.createElement('div');
+      row.className = 'playlist-item' + (isCurrent ? ' current' : '');
+      row.innerHTML = `<span class="check-icon ${iconClass}">${iconInner}</span> ${item.label} <span class="pl-time">${item.time}</span>`;
+      wrap.appendChild(row);
+    });
+    const btn = document.getElementById('mark-done-btn');
+    const done = state.lessonsDone['pt-bac-nhat'];
+    btn.textContent = done ? '✓ Đã học xong' : 'Đánh dấu đã học xong';
+    btn.disabled = done;
+  }
+
+  document.getElementById('mark-done-btn').addEventListener('click', async ()=>{
+    if(state.lessonsDone['pt-bac-nhat']) return;
+    try{
+      const data = await api('/api/lesson/complete', { method:'POST', body: JSON.stringify({ lessonId:'pt-bac-nhat' }) });
+      Object.assign(state, {
+        points: data.state.points,
+        courseProgress: data.state.courseProgress,
+        lessonsDone: data.state.lessonsDone
+      });
+      refreshHeader();
+      updateCourseProgressUI();
+      renderLesson();
+      renderHeroMap();
+      showToast('Đã hoàn thành bài giảng · +20 điểm (đã lưu)');
+    }catch(err){
+      showToast('Lỗi: '+err.message);
+    }
+  });
+
+  function updateCourseProgressUI(){
+    const pct = state.courseProgress['pt-bac-nhat'];
+    const fill = document.getElementById('progress-pt-bac-nhat');
+    const text = document.getElementById('progress-text-pt-bac-nhat');
+    if(fill){ fill.style.width = pct+'%'; }
+    if(text){ text.textContent = pct; }
+  }
+
+  // =========================================================
+  // PRACTICE VIEW
+  // =========================================================
+  function masteryLabel(v){
+    if(v>=80) return {text:'Vững', color:'var(--teal)'};
+    if(v>=40) return {text:'Đang học', color:'var(--amber)'};
+    return {text:'Mới bắt đầu', color:'var(--coral)'};
+  }
+
+  function renderStreakDots(){
+    const wrap = document.getElementById('streak-mini');
+    wrap.innerHTML = '';
+    state.practice.streakDots.forEach(filled=>{
+      const d = document.createElement('div');
+      d.className = 'streak-dot' + (filled ? ' filled' : '');
+      wrap.appendChild(d);
+    });
+  }
+
+  function renderMasterySide(){
+    const m1 = masteryLabel(state.mastery.chuyenve);
+    const el = document.getElementById('mastery-1');
+    el.textContent = m1.text;
+    el.style.color = m1.color;
+  }
+
+  function renderPractice(){
+    renderStreakDots();
+    renderMasterySide();
+    const card = document.getElementById('practice-card');
+    const total = questionBank.length;
+
+    if(state.practice.qIndex >= total){
+      card.innerHTML = `
+        <div class="results-wrap">
+          <div class="results-num">${state.practice.correctCount}/${total}</div>
+          <p style="color:var(--ink-soft);font-size:14.5px;margin:10px 0 24px;">Bạn đã hoàn thành bộ luyện tập "Phương trình bậc nhất".</p>
+          <button class="btn-primary" id="retry-btn" style="margin:0 auto;">Luyện tập lại</button>
+        </div>`;
+      document.getElementById('retry-btn').addEventListener('click', ()=>{
+        state.practice = { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false };
+        renderPractice();
+      });
+      return;
+    }
+
+    const q = questionBank[state.practice.qIndex];
+    const letters = ['A','B','C','D'];
+    card.innerHTML = `
+      <div class="practice-top">
+        <span class="practice-pill">Phương trình bậc nhất</span>
+        <span class="q-counter">Câu ${state.practice.qIndex+1} / ${total}</span>
+      </div>
+      <div id="feedback-slot"></div>
+      <div class="question-text">${q.html}</div>
+      <div class="hint-box" id="hint-box">💡 ${q.hint}</div>
+      <div class="choices" id="choices-wrap">
+        ${q.choices.map((c,i)=>`<div class="choice" data-i="${i}"><span class="choice-letter">${letters[i]}</span> ${c}</div>`).join('')}
+      </div>
+      <div class="practice-actions">
+        <a class="hint-link" id="hint-link" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5c.6.5 1 1.3 1 2.5h6c0-1.2.4-2 1-2.5A6 6 0 0012 3z"/></svg>
+          Gợi ý
+        </a>
+        <button class="btn-primary" id="check-btn">Kiểm tra đáp án</button>
+      </div>
+    `;
+
+    document.getElementById('hint-link').addEventListener('click', (e)=>{
+      e.preventDefault();
+      document.getElementById('hint-box').classList.toggle('show');
+    });
+
+    card.querySelectorAll('.choice').forEach(c=>{
+      c.addEventListener('click', ()=>{
+        if(state.practice.checked) return;
+        card.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));
+        c.classList.add('selected');
+        state.practice.selected = parseInt(c.dataset.i);
+      });
+    });
+
+    const checkBtn = document.getElementById('check-btn');
+    checkBtn.addEventListener('click', async ()=>{
+      if(state.practice.checked){
+        state.practice.qIndex++;
+        state.practice.selected = null;
+        state.practice.checked = false;
+        renderPractice();
+        return;
+      }
+      if(state.practice.selected === null){
+        showToast('Hãy chọn một đáp án trước khi kiểm tra');
+        return;
+      }
+      state.practice.checked = true;
+      const isCorrect = state.practice.selected === q.correct;
+      const choices = card.querySelectorAll('.choice');
+      choices.forEach(c=>c.classList.add('disabled'));
+      choices[q.correct].classList.add('correct');
+      if(!isCorrect) choices[state.practice.selected].classList.add('incorrect');
+
+      const slot = document.getElementById('feedback-slot');
+      const dots = state.practice.streakDots;
+      dots[state.practice.qIndex] = isCorrect;
+      renderStreakDots();
+
+      checkBtn.disabled = true;
+      try{
+        const data = await api('/api/practice/answer', { method:'POST', body: JSON.stringify({ correct: isCorrect }) });
+        state.points = data.state.points;
+        state.mastery = data.state.mastery;
+      }catch(err){
+        showToast('Không lưu được kết quả: '+err.message);
+      }
+      checkBtn.disabled = false;
+
+      if(isCorrect){
+        state.practice.correctCount++;
+        slot.innerHTML = `<div class="feedback-banner ok">✓ Chính xác! +10 điểm (đã lưu)</div>`;
+      } else {
+        slot.innerHTML = `<div class="feedback-banner bad">✗ Chưa đúng. Đáp án đúng là "${q.choices[q.correct]}".</div>`;
+      }
+      renderMasterySide();
+      refreshHeader();
+      checkBtn.textContent = state.practice.qIndex+1 >= total ? 'Xem kết quả' : 'Câu tiếp theo';
+    });
+  }
+
+  // =========================================================
+  // SKILL MAP (signature element) — clickable nodes
+  // =========================================================
+  function ringPath(cx, cy, r, pct){
+    // returns SVG path for a progress arc
+    const start = -90;
+    const end = start + pct*3.6;
+    const toXY = (deg)=>{
+      const rad = (deg*Math.PI)/180;
+      return [cx + r*Math.cos(rad), cy + r*Math.sin(rad)];
+    };
+    const [sx,sy] = toXY(start);
+    const [ex,ey] = toXY(end);
+    const large = pct > 50 ? 1 : 0;
+    return `M ${sx} ${sy} A ${r} ${r} 0 ${large} 1 ${ex} ${ey}`;
+  }
+
+  function drawSkillMap(svgId, nodes, edges, showLabels){
+    const svg = document.getElementById(svgId);
+    svg.innerHTML = '';
+    const ns = 'http://www.w3.org/2000/svg';
+    const colorFor = (status)=> status==='done' ? '#1F8A82' : status==='active' ? '#F2A339' : '#C7D2DE';
+    const bgFor = (status)=> status==='done' ? '#E4F3F1' : status==='active' ? '#FCF0DC' : '#F3F5F8';
+
+    // edges first (behind nodes)
+    edges.forEach(([a,b])=>{
+      const n1 = nodes[a], n2 = nodes[b];
+      const line = document.createElementNS(ns,'line');
+      line.setAttribute('x1', n1.x); line.setAttribute('y1', n1.y);
+      line.setAttribute('x2', n2.x); line.setAttribute('y2', n2.y);
+      line.setAttribute('stroke', '#D8E3EC');
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-dasharray', (n1.status==='locked'||n2.status==='locked') ? '4,5':'0');
+      svg.appendChild(line);
+    });
+
+    nodes.forEach(n=>{
+      const r = 22;
+      const g = document.createElementNS(ns,'g');
+
+      const bg = document.createElementNS(ns,'circle');
+      bg.setAttribute('cx', n.x); bg.setAttribute('cy', n.y); bg.setAttribute('r', r);
+      bg.setAttribute('fill', bgFor(n.status));
+      g.appendChild(bg);
+
+      if(n.status !== 'locked'){
+        const track = document.createElementNS(ns,'circle');
+        track.setAttribute('cx', n.x); track.setAttribute('cy', n.y); track.setAttribute('r', r-3);
+        track.setAttribute('fill','none'); track.setAttribute('stroke', '#fff'); track.setAttribute('stroke-width','4');
+        g.appendChild(track);
+
+        const arc = document.createElementNS(ns,'path');
+        arc.setAttribute('d', ringPath(n.x, n.y, r-3, n.pct));
+        arc.setAttribute('fill','none');
+        arc.setAttribute('stroke', colorFor(n.status));
+        arc.setAttribute('stroke-width','4');
+        arc.setAttribute('stroke-linecap','round');
+        g.appendChild(arc);
+      } else {
+        const ring = document.createElementNS(ns,'circle');
+        ring.setAttribute('cx', n.x); ring.setAttribute('cy', n.y); ring.setAttribute('r', r-3);
+        ring.setAttribute('fill','none'); ring.setAttribute('stroke','#C7D2DE'); ring.setAttribute('stroke-width','2');
+        ring.setAttribute('stroke-dasharray','3,4');
+        g.appendChild(ring);
+      }
+
+      const icon = document.createElementNS(ns,'text');
+      icon.setAttribute('x', n.x); icon.setAttribute('y', n.y+4);
+      icon.setAttribute('text-anchor','middle');
+      icon.setAttribute('font-size','13');
+      icon.setAttribute('font-family','JetBrains Mono');
+      icon.setAttribute('font-weight','600');
+      icon.setAttribute('fill', n.status==='locked' ? '#9AA9BE' : '#16233F');
+      icon.textContent = n.status==='done' ? '✓' : n.symbol;
+      g.appendChild(icon);
+
+      if(showLabels){
+        const label = document.createElementNS(ns,'text');
+        label.setAttribute('x', n.x); label.setAttribute('y', n.y + r + 18);
+        label.setAttribute('text-anchor','middle');
+        label.setAttribute('font-size','11.5px');
+        label.setAttribute('font-family','Inter');
+        label.setAttribute('fill', '#4A5A78');
+        // wrap simple: split by space, two lines max
+        const words = n.label.split(' ');
+        const mid = Math.ceil(words.length/2);
+        const l1 = words.slice(0,mid).join(' ');
+        const l2 = words.slice(mid).join(' ');
+        const t1 = document.createElementNS(ns,'tspan');
+        t1.setAttribute('x', n.x); t1.setAttribute('dy', 0);
+        t1.textContent = l1;
+        label.appendChild(t1);
+        if(l2){
+          const t2 = document.createElementNS(ns,'tspan');
+          t2.setAttribute('x', n.x); t2.setAttribute('dy', 13);
+          t2.textContent = l2;
+          label.appendChild(t2);
+        }
+        g.appendChild(label);
+      }
+
+      g.style.cursor = n.status==='locked' ? 'not-allowed' : 'pointer';
+      g.addEventListener('click', ()=>{
+        if(n.status==='locked'){
+          showToast('Hoàn thành kỹ năng trước đó để mở khoá "'+n.label+'"');
+        } else if(n.status==='done'){
+          showToast('Bạn đã thành thạo "'+n.label+'" — 100%');
+        } else {
+          showToast('Mở bài giảng "'+n.label+'"');
+          goToView('lesson');
+        }
+      });
+      svg.appendChild(g);
+    });
+  }
+
+  // compact hero map
+  function buildSkillNodes(){
+    const ptPct = state.courseProgress['pt-bac-nhat'];
+    return [
+      {x:40,y:110,status:'done',pct:100,symbol:'+',label:'Biểu thức'},
+      {x:150,y:70,status:'done',pct:100,symbol:'×',label:'Đơn thức'},
+      {x:150,y:150,status:'done',pct:100,symbol:'÷',label:'Đa thức'},
+      {x:270,y:110,status: ptPct>=100?'done':'active',pct:ptPct,symbol:'x',label:'Phương trình bậc nhất'},
+      {x:390,y:60,status:'active',pct:30,symbol:'△',label:'Hệ phương trình'},
+      {x:390,y:160,status:'locked',pct:0,symbol:'≠',label:'Bất phương trình'},
+      {x:510,y:110,status:'locked',pct:0,symbol:'f',label:'Hàm số bậc nhất'},
+      {x:630,y:70,status:'locked',pct:0,symbol:'∠',label:'Đồ thị hàm số'},
+      {x:630,y:150,status:'locked',pct:0,symbol:'∑',label:'Hệ hai ẩn'},
+      {x:750,y:110,status:'locked',pct:0,symbol:'★',label:'Ứng dụng thực tế'},
+    ];
+  }
+  const heroEdges = [[0,1],[0,2],[1,3],[2,3],[3,4],[3,5],[4,6],[5,6],[6,7],[6,8],[7,9],[8,9]];
+
+  function renderHeroMap(){
+    drawSkillMap('skillmap', buildSkillNodes(), heroEdges, false);
+  }
+  function renderFullTree(){
+    const fullNodes = buildSkillNodes().map(n=>({...n, x:n.x*1.15+20, y:n.y*1.6+40}));
+    drawSkillMap('skillmap-full', fullNodes, heroEdges, true);
+  }
+
+  // =========================================================
+  // INIT
+  // =========================================================
+  tryResumeSession();
+</script>
+</body>
+</html>

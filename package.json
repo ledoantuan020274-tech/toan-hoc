@@ -1,0 +1,14 @@
+{
+  "name": "duong-so-app",
+  "version": "1.0.0",
+  "description": "Đây là bản nâng cấp có **máy chủ backend** và **cơ sở dữ liệu**, khác với bản demo tĩnh trước đó:",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
