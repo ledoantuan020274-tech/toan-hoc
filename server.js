@@ -25,18 +25,41 @@ function saveDB(db) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 }
 
+// ---------------------------------------------------------------
+// Cấu trúc chương trình — TOÁN THPT QUỐC GIA 2027
+// (dùng để khởi tạo tiến độ mặc định cho tài khoản mới)
+// ---------------------------------------------------------------
+const SUBJECTS = [
+  { id: 'ham-so-dao-ham', skills: ['don-dieu', 'cuc-tri', 'gtln-gtnn', 'tiem-can', 'khao-sat'] },
+  { id: 'mu-logarit', skills: ['luy-thua-can', 'ham-so-mu', 'ham-so-log', 'pt-mu-log', 'bpt-mu-log'] },
+  { id: 'nguyen-ham-tich-phan', skills: ['nguyen-ham', 'tich-phan', 'ung-dung-tich-phan'] },
+  { id: 'so-phuc', skills: ['khai-niem-so-phuc', 'phep-toan-so-phuc', 'pt-bac-hai-so-phuc'] },
+  { id: 'oxyz', skills: ['he-truc-oxyz', 'pt-mat-phang', 'pt-duong-thang', 'pt-mat-cau', 'goc-khoang-cach'] },
+];
+const ALL_SKILL_IDS = SUBJECTS.flatMap(s => s.skills);
+
 function defaultUserState() {
+  const lessonsDone = {};
+  const mastery = {};
+  ALL_SKILL_IDS.forEach(id => { lessonsDone[id] = false; mastery[id] = 0; });
   return {
     points: 0,
     streak: 0,
     lastActiveDate: null,
-    courseProgress: { 'pt-bac-nhat': 0 },
-    lessonsDone: {
-      'be-thuc': false, 'don-thuc': false, 'nhan-don-thuc': false,
-      'pt-bac-nhat': false, 'an-o-mau': false, 'bpt-bac-nhat': false, 'he-2an': false
-    },
-    mastery: { chuyenve: 0, rutgon: 0 }
+    lessonsDone,
+    mastery
   };
+}
+
+function ensureUserStateShape(user) {
+  if (!user.state.lessonsDone) user.state.lessonsDone = {};
+  if (!user.state.mastery) user.state.mastery = {};
+  ALL_SKILL_IDS.forEach(id => {
+    if (!(id in user.state.lessonsDone)) user.state.lessonsDone[id] = false;
+    if (!(id in user.state.mastery)) user.state.mastery[id] = 0;
+  });
+  if (typeof user.state.points !== 'number') user.state.points = 0;
+  if (typeof user.state.streak !== 'number') user.state.streak = 0;
 }
 
 function touchStreak(user) {
@@ -135,6 +158,7 @@ const server = http.createServer(async (req, res) => {
         if (!user || hashPassword(password, user.salt) !== user.passwordHash) {
           return sendJSON(res, 401, { error: 'Sai tên đăng nhập hoặc mật khẩu.' });
         }
+        ensureUserStateShape(user);
         touchStreak(user);
         saveDB(db);
         const token = crypto.randomBytes(24).toString('hex');
@@ -147,6 +171,7 @@ const server = http.createServer(async (req, res) => {
       if (!auth) return sendJSON(res, 401, { error: 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.' });
       const user = db.users[auth.username];
       if (!user) return sendJSON(res, 401, { error: 'Tài khoản không tồn tại.' });
+      ensureUserStateShape(user);
 
       if (pathname === '/api/logout' && req.method === 'POST') {
         sessions.delete(auth.token);
@@ -158,26 +183,23 @@ const server = http.createServer(async (req, res) => {
       }
 
       if (pathname === '/api/lesson/complete' && req.method === 'POST') {
-        const { lessonId } = await readJSONBody(req);
-        const id = lessonId || 'pt-bac-nhat';
-        if (id in user.state.lessonsDone && !user.state.lessonsDone[id]) {
-          user.state.lessonsDone[id] = true;
+        const { skillId } = await readJSONBody(req);
+        if (skillId && skillId in user.state.lessonsDone && !user.state.lessonsDone[skillId]) {
+          user.state.lessonsDone[skillId] = true;
           user.state.points += 20;
-          if (user.state.courseProgress[id] !== undefined) {
-            user.state.courseProgress[id] = Math.min(100, user.state.courseProgress[id] + 8);
-          }
         }
         saveDB(db);
         return sendJSON(res, 200, { state: user.state });
       }
 
       if (pathname === '/api/practice/answer' && req.method === 'POST') {
-        const { correct } = await readJSONBody(req);
+        const { skillId, correct } = await readJSONBody(req);
+        const id = (skillId && skillId in user.state.mastery) ? skillId : ALL_SKILL_IDS[0];
         if (correct) {
           user.state.points += 10;
-          user.state.mastery.chuyenve = Math.min(100, user.state.mastery.chuyenve + 8);
+          user.state.mastery[id] = Math.min(100, user.state.mastery[id] + 8);
         } else {
-          user.state.mastery.chuyenve = Math.max(0, user.state.mastery.chuyenve - 3);
+          user.state.mastery[id] = Math.max(0, user.state.mastery[id] - 3);
         }
         saveDB(db);
         return sendJSON(res, 200, { state: user.state });
