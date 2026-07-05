@@ -351,11 +351,8 @@
       </button>
 
       <div class="nav-divider"></div>
-      <div class="nav-label">Môn học</div>
-      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12l2 2v14l-2-2H6a2 2 0 01-2-2z"/></svg> Số học</button>
-      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l16 16"/></svg> Đại số</button>
-      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 6-9 6-9-6z"/><path d="M3 8v8l9 6 9-6V8"/></svg> Hình học</button>
-      <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg> Giải tích</button>
+      <div class="nav-label">Chuyên đề</div>
+      <div id="subject-nav"><!-- rendered by JS --></div>
     </nav>
 
     <div class="sidebar-footer">
@@ -394,10 +391,10 @@
         <div class="hero-top">
           <div>
             <p class="hero-eyebrow">Lộ trình của bạn</p>
-            <h1 class="hero-title">Đại số cơ bản — Lớp 8</h1>
-            <p class="hero-sub">Bạn đã thành thạo 6/14 kỹ năng. Tiếp tục với "Phương trình bậc nhất một ẩn" để giữ chuỗi học của mình.</p>
+            <h1 class="hero-title" id="hero-title">Chuyên đề 1: Hàm số và đạo hàm</h1>
+            <p class="hero-sub" id="hero-sub">Đang tải tiến độ...</p>
           </div>
-          <button class="hero-cta">
+          <button class="hero-cta" id="hero-cta">
             Học tiếp
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
@@ -414,70 +411,23 @@
       </div>
 
       <div class="stat-row">
-        <div class="stat-card"><div class="stat-num" style="color:var(--teal)">6</div><div class="stat-label">Kỹ năng thành thạo</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:var(--amber)">3</div><div class="stat-label">Đang luyện tập</div></div>
-        <div class="stat-card"><div class="stat-num mono">89%</div><div class="stat-label">Độ chính xác tuần này</div></div>
-        <div class="stat-card"><div class="stat-num mono">4h 20m</div><div class="stat-label">Thời gian học tuần này</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--teal)" id="stat-done">0</div><div class="stat-label">Kỹ năng thành thạo</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--amber)" id="stat-progress">0</div><div class="stat-label">Đang luyện tập</div></div>
+        <div class="stat-card"><div class="stat-num mono" id="stat-points">0</div><div class="stat-label">Tổng điểm</div></div>
+        <div class="stat-card"><div class="stat-num mono" id="stat-streak">0 ngày</div><div class="stat-label">Chuỗi học liên tiếp</div></div>
       </div>
 
-      <div class="section-head"><h2>Tiếp tục học</h2><a class="see-all" href="#">Xem tất cả →</a></div>
-      <div class="row" id="course-row">
-        <div class="course-card" data-search="phương trình bậc nhất đại số" data-course="pt-bac-nhat">
-          <div class="course-icon" style="background:var(--teal-tint)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F8A82" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l16 16"/></svg>
-          </div>
-          <h3>Phương trình bậc nhất</h3>
-          <p>Đại số · Lớp 8</p>
-          <div class="progress-track"><div class="progress-fill" id="progress-pt-bac-nhat" style="width:62%"></div></div>
-          <div class="progress-text"><span id="progress-text-pt-bac-nhat">62</span>% hoàn thành</div>
-        </div>
-        <div class="course-card" data-search="định lý pythagoras hình học">
-          <div class="course-icon" style="background:var(--amber-tint)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B87415" stroke-width="2"><path d="M12 2l9 6-9 6-9-6z"/><path d="M3 8v8l9 6 9-6V8"/></svg>
-          </div>
-          <h3>Định lý Pythagoras</h3>
-          <p>Hình học · Lớp 8</p>
-          <div class="progress-track"><div class="progress-fill" style="width:30%;background:var(--amber)"></div></div>
-          <div class="progress-text">30% hoàn thành</div>
-        </div>
-        <div class="course-card" data-search="tỉ lệ thức số học">
-          <div class="course-icon" style="background:var(--coral-tint)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4462F" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 9h.01M9 15c1 1 5 1 6 0"/></svg>
-          </div>
-          <h3>Tỉ lệ thức</h3>
-          <p>Số học · Lớp 8</p>
-          <div class="progress-track"><div class="progress-fill" style="width:10%;background:var(--coral)"></div></div>
-          <div class="progress-text">10% hoàn thành</div>
-        </div>
-        <div class="course-card" data-search="hàm số bậc nhất đại số">
-          <div class="course-icon" style="background:var(--teal-tint)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F8A82" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>
-          </div>
-          <h3>Hàm số bậc nhất</h3>
-          <p>Đại số · Lớp 8</p>
-          <div class="progress-track"><div class="progress-fill" style="width:5%"></div></div>
-          <div class="progress-text">5% hoàn thành</div>
-        </div>
-      </div>
+      <div class="section-head"><h2>5 chuyên đề trọng tâm — Kỳ thi THPT Quốc gia 2027</h2></div>
+      <div class="row" id="course-row"><!-- rendered by JS --></div>
 
-      <div class="section-head"><h2>Đề xuất luyện tập</h2><a class="see-all" href="#">Xem tất cả →</a></div>
-      <div class="row" style="margin-bottom:8px;">
-        <div class="course-card" data-search="luyện tập giải phương trình">
-          <h3>10 câu — Giải phương trình</h3>
-          <p>Ôn lại kỹ năng đã học · ~12 phút</p>
-          <button class="btn-primary start-practice" style="width:100%;justify-content:center;">Bắt đầu</button>
-        </div>
-        <div class="course-card" data-search="kiểm tra tam giác đồng dạng">
-          <h3>Kiểm tra nhanh — Tam giác đồng dạng</h3>
-          <p>5 câu · ~6 phút</p>
-          <button class="btn-primary start-practice" style="width:100%;justify-content:center;background:var(--amber);">Bắt đầu</button>
-        </div>
+      <div class="section-head"><h2>Đề xuất luyện tập</h2></div>
+      <div class="row" style="margin-bottom:8px;" id="practice-suggest-row"><!-- rendered by JS -->
       </div>
     </div>
 
     <!-- ============ SKILL TREE VIEW ============ -->
     <div class="view" id="view-tree">
-      <div class="section-head"><h2>Lộ trình kỹ năng — Đại số cơ bản</h2></div>
+      <div class="section-head"><h2 id="tree-title">Lộ trình kỹ năng — Hàm số và đạo hàm</h2></div>
       <div class="tree-legend">
         <span><span class="legend-dot" style="background:#1F8A82"></span>Thành thạo</span>
         <span><span class="legend-dot" style="background:#F2A339"></span>Đang học</span>
@@ -497,16 +447,14 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
             </div>
           </div>
-          <h1 class="lesson-title">Giải phương trình bậc nhất một ẩn</h1>
+          <h1 class="lesson-title" id="lesson-title">Tính đơn điệu của hàm số</h1>
           <div class="lesson-meta">
-            <span>⏱ 8 phút</span>
-            <span>📘 Đại số · Bài 4/9</span>
-            <span>🎯 3 mục tiêu học tập</span>
+            <span id="lesson-meta-time">⏱ 8 phút</span>
+            <span id="lesson-meta-subject">📘 Hàm số và đạo hàm · Bài 1/5</span>
+            <span>🎯 THPT Quốc gia 2027</span>
           </div>
-          <div class="lesson-body">
-            <p>Một phương trình bậc nhất một ẩn có dạng <span class="formula">ax + b = 0</span>, trong đó <span class="formula">a ≠ 0</span>. Để giải, ta chuyển các số hạng chứa ẩn về một vế, hằng số về vế còn lại, rồi chia hai vế cho hệ số của ẩn.</p>
-            <p>Ví dụ: với phương trình <span class="formula">2x + 6 = 14</span>, ta trừ 6 ở hai vế được <span class="formula">2x = 8</span>, sau đó chia hai vế cho 2 để có <span class="formula">x = 4</span>.</p>
-            <p>Hãy chú ý dấu khi chuyển vế — đây là lỗi phổ biến nhất khi mới học dạng toán này.</p>
+          <div class="lesson-body" id="lesson-body">
+            <p>Đang tải nội dung bài giảng...</p>
           </div>
           <div class="next-cta" style="gap:10px;">
             <button class="btn-secondary" id="mark-done-btn">Đánh dấu đã học xong</button>
@@ -518,7 +466,7 @@
         </div>
 
         <div class="playlist" id="playlist">
-          <div class="playlist-head">Đại số cơ bản · 9 bài</div>
+          <div class="playlist-head" id="playlist-head">Hàm số và đạo hàm · 5 bài</div>
           <!-- items rendered by JS -->
         </div>
       </div>
@@ -536,13 +484,11 @@
           </div>
           <div class="side-card">
             <h4>Mức độ thành thạo</h4>
-            <div class="mastery-ring-row"><span class="label">Chuyển vế</span><span class="val" id="mastery-1" style="color:var(--amber)">Đang học</span></div>
-            <div style="height:10px"></div>
-            <div class="mastery-ring-row"><span class="label">Rút gọn phân thức</span><span class="val" style="color:var(--amber)">Đang học</span></div>
+            <div class="mastery-ring-row"><span class="label" id="mastery-label">Tính đơn điệu</span><span class="val" id="mastery-1" style="color:var(--amber)">Mới bắt đầu</span></div>
           </div>
           <div class="side-card">
             <h4>Ghi chú nhanh</h4>
-            <p id="hint-note" style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;">Nhân hai vế với mẫu số chung trước khi chuyển vế — tránh nhầm dấu.</p>
+            <p id="hint-note" style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;">Dấu của y′ quyết định chiều biến thiên: y′ &gt; 0 hàm đồng biến, y′ &lt; 0 hàm nghịch biến.</p>
           </div>
         </div>
       </div>
@@ -631,14 +577,14 @@
   function enterApp(username, serverState){
     state.points = serverState.points;
     state.streak = serverState.streak;
-    state.courseProgress = serverState.courseProgress;
     state.lessonsDone = serverState.lessonsDone;
     state.mastery = serverState.mastery;
     document.getElementById('avatar-initials').textContent = username.slice(0,2).toUpperCase();
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-shell').classList.add('ready');
+    renderSubjectNav();
     refreshHeader();
-    updateCourseProgressUI();
+    renderDashboard();
     renderHeroMap();
     renderFullTree();
     renderLesson();
@@ -660,59 +606,144 @@
   }
 
   // =========================================================
+  // CHƯƠNG TRÌNH — TOÁN THPT QUỐC GIA 2027
+  // =========================================================
+  const SUBJECTS = [
+    { id:'ham-so-dao-ham', title:'Hàm số và đạo hàm', icon:'📈', color:'teal', skills:[
+        {id:'don-dieu', label:'Tính đơn điệu', symbol:"f'"},
+        {id:'cuc-tri', label:'Cực trị', symbol:'⤒'},
+        {id:'gtln-gtnn', label:'GTLN - GTNN', symbol:'≶'},
+        {id:'tiem-can', label:'Tiệm cận', symbol:'⇥'},
+        {id:'khao-sat', label:'Khảo sát hàm số', symbol:'⌁'},
+    ]},
+    { id:'mu-logarit', title:'Mũ và Logarit', icon:'📊', color:'amber', skills:[
+        {id:'luy-thua-can', label:'Luỹ thừa - Căn', symbol:'ⁿ'},
+        {id:'ham-so-mu', label:'Hàm số mũ', symbol:'eˣ'},
+        {id:'ham-so-log', label:'Hàm số Logarit', symbol:'ln'},
+        {id:'pt-mu-log', label:'PT mũ - logarit', symbol:'='},
+        {id:'bpt-mu-log', label:'BPT mũ - logarit', symbol:'≠'},
+    ]},
+    { id:'nguyen-ham-tich-phan', title:'Nguyên hàm - Tích phân', icon:'∫', color:'coral', skills:[
+        {id:'nguyen-ham', label:'Nguyên hàm', symbol:'∫'},
+        {id:'tich-phan', label:'Tích phân xác định', symbol:'∫ᵇ'},
+        {id:'ung-dung-tich-phan', label:'Ứng dụng tích phân', symbol:'S'},
+    ]},
+    { id:'so-phuc', title:'Số phức', icon:'ℂ', color:'teal', skills:[
+        {id:'khai-niem-so-phuc', label:'Khái niệm số phức', symbol:'i'},
+        {id:'phep-toan-so-phuc', label:'Phép toán số phức', symbol:'+'},
+        {id:'pt-bac-hai-so-phuc', label:'PT bậc hai hệ số thực', symbol:'√'},
+    ]},
+    { id:'oxyz', title:'Oxyz', icon:'📐', color:'amber', skills:[
+        {id:'he-truc-oxyz', label:'Hệ trục toạ độ Oxyz', symbol:'⊕'},
+        {id:'pt-mat-phang', label:'PT mặt phẳng', symbol:'▱'},
+        {id:'pt-duong-thang', label:'PT đường thẳng', symbol:'╱'},
+        {id:'pt-mat-cau', label:'PT mặt cầu', symbol:'○'},
+        {id:'goc-khoang-cach', label:'Góc & khoảng cách', symbol:'∠'},
+    ]},
+  ];
+  const SUBJECT_ICON_SVG = {
+    teal:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F8A82" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>',
+    amber:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B87415" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+    coral:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4462F" stroke-width="2"><path d="M4 12h16M4 12a4 4 0 018 0 4 4 0 008 0"/></svg>'
+  };
+  const TINT = { teal:'var(--teal-tint)', amber:'var(--amber-tint)', coral:'var(--coral-tint)' };
+
+  function findSubject(id){ return SUBJECTS.find(s=>s.id===id); }
+  function skillIndexInSubject(subject, skillId){ return subject.skills.findIndex(s=>s.id===skillId); }
+
+  // ---- Nội dung bài giảng (đầy đủ cho Chuyên đề 1; các chuyên đề khác sắp ra mắt) ----
+  const lessonContent = {
+    'don-dieu': {
+      duration:'10 phút',
+      body:`<p>Cho hàm số <span class="formula">y = f(x)</span> có đạo hàm trên khoảng <span class="formula">K</span>. Dấu của <span class="formula">f'(x)</span> quyết định chiều biến thiên của hàm số:</p>
+        <p>• Nếu <span class="formula">f'(x) &gt; 0</span> với mọi <span class="formula">x ∈ K</span> thì hàm số <b>đồng biến</b> trên K.</p>
+        <p>• Nếu <span class="formula">f'(x) &lt; 0</span> với mọi <span class="formula">x ∈ K</span> thì hàm số <b>nghịch biến</b> trên K.</p>
+        <p>Ví dụ: với <span class="formula">y = x³ − 3x² + 2</span>, ta có <span class="formula">y' = 3x² − 6x = 3x(x − 2)</span>. Xét dấu <span class="formula">y'</span> trên trục số để suy ra các khoảng đồng biến, nghịch biến.</p>
+        <p>Lỗi thường gặp: quên xét dấu tam thức bậc hai đúng cách, hoặc nhầm chiều bất đẳng thức khi hệ số bậc cao âm.</p>`
+    },
+    'cuc-tri': {
+      duration:'9 phút',
+      body:`<p>Điểm <span class="formula">x₀</span> là điểm cực trị của hàm số nếu <span class="formula">f'(x₀) = 0</span> (hoặc không xác định) và <span class="formula">f'(x)</span> đổi dấu khi qua <span class="formula">x₀</span>.</p>
+        <p>Quy tắc: lập bảng biến thiên từ dấu của <span class="formula">f'(x)</span> — nếu đổi dấu từ <b>+ sang −</b> thì <span class="formula">x₀</span> là điểm <b>cực đại</b>; nếu đổi dấu từ <b>− sang +</b> thì <span class="formula">x₀</span> là điểm <b>cực tiểu</b>.</p>
+        <p>Có thể dùng đạo hàm cấp hai: nếu <span class="formula">f'(x₀)=0</span> và <span class="formula">f''(x₀) &lt; 0</span> thì cực đại; nếu <span class="formula">f''(x₀) &gt; 0</span> thì cực tiểu.</p>`
+    },
+    'gtln-gtnn': {
+      duration:'11 phút',
+      body:`<p>Để tìm GTLN, GTNN của hàm số liên tục trên đoạn <span class="formula">[a; b]</span>: tính <span class="formula">f'(x)</span>, tìm các điểm tới hạn trong <span class="formula">(a;b)</span>, rồi so sánh giá trị hàm số tại các điểm đó với <span class="formula">f(a)</span> và <span class="formula">f(b)</span>.</p>
+        <p>Trên toàn trục số (không giới hạn đoạn), GTLN/GTNN (nếu có) dựa vào bảng biến thiên: giá trị tại điểm cực trị chính là GTLN hoặc GTNN khi hàm số chỉ có một cực trị và tiệm cận phù hợp.</p>`
+    },
+    'tiem-can': {
+      duration:'8 phút',
+      body:`<p>Với hàm phân thức <span class="formula">y = (ax+b)/(cx+d)</span>:</p>
+        <p>• <b>Tiệm cận đứng</b>: đường thẳng <span class="formula">x = -d/c</span> (nghiệm của mẫu, không phải nghiệm của tử).</p>
+        <p>• <b>Tiệm cận ngang</b>: đường thẳng <span class="formula">y = a/c</span> (tỉ số hệ số bậc cao nhất khi bậc tử bằng bậc mẫu).</p>
+        <p>Với hàm phân thức bậc cao hơn, xét giới hạn khi <span class="formula">x → ±∞</span> và khi <span class="formula">x</span> tiến tới nghiệm của mẫu số.</p>`
+    },
+    'khao-sat': {
+      duration:'14 phút',
+      body:`<p>Các bước khảo sát và vẽ đồ thị hàm số: (1) Tìm tập xác định; (2) Xét chiều biến thiên (tính <span class="formula">y'</span>, lập bảng biến thiên); (3) Tìm cực trị; (4) Tìm tiệm cận (nếu có); (5) Lập bảng giá trị và vẽ đồ thị.</p>
+        <p>Đây là dạng bài tổng hợp toàn bộ 4 kỹ năng trước: đơn điệu, cực trị, GTLN-GTNN và tiệm cận — nên hãy chắc chắn đã nắm vững các bài trước khi học bài này.</p>`
+    }
+  };
+  const genericLessonBody = (label)=>`<p>Nội dung chi tiết cho bài <b>${label}</b> đang được biên soạn và sẽ sớm cập nhật.</p>
+    <p>Trong lúc chờ, bạn có thể quay lại Chuyên đề 1: Hàm số và đạo hàm — nội dung đã có đầy đủ bài giảng và luyện tập.</p>`;
+
+  // ---- Ngân hàng câu hỏi (đầy đủ cho Chuyên đề 1) ----
+  const questionBank = {
+    'don-dieu': [
+      { html:'Cho hàm số <span class="mono">y = x³ − 3x² + 2</span>. Hàm số đồng biến trên khoảng nào sau đây?',
+        choices:['(0; 2)','(−∞; 0) và (2; +∞)','(−∞; +∞)','(0; +∞)'], correct:1,
+        hint:"y' = 3x² − 6x = 3x(x − 2). Xét dấu y' trên trục số: y' > 0 khi x < 0 hoặc x > 2." },
+      { html:'Cho hàm số <span class="mono">y = −x³ + 3x − 1</span>. Hàm số nghịch biến trên khoảng nào sau đây?',
+        choices:['(−1; 1)','(−∞; −1) và (1; +∞)','(−∞; +∞)','(−1; +∞)'], correct:1,
+        hint:"y' = −3x² + 3 = −3(x−1)(x+1). y' < 0 khi (x−1)(x+1) > 0, tức x < −1 hoặc x > 1." }
+    ],
+    'cuc-tri': [
+      { html:'Hàm số <span class="mono">y = x³ − 3x² + 2</span> đạt cực đại tại <span class="mono">x =</span> ?',
+        choices:['x = 0','x = 2','x = 1','x = −1'], correct:0,
+        hint:"y' = 3x(x−2) = 0 tại x=0, x=2. y'' = 6x − 6; tại x=0, y''=−6<0 nên đó là điểm cực đại." },
+      { html:'Hàm số <span class="mono">y = x⁴ − 2x² + 1</span> có bao nhiêu điểm cực trị?',
+        choices:['1','2','3','4'], correct:2,
+        hint:"y' = 4x³ − 4x = 4x(x−1)(x+1) = 0 tại x = 0, 1, −1 → 3 điểm cực trị." }
+    ],
+    'gtln-gtnn': [
+      { html:'Tìm giá trị lớn nhất của hàm số <span class="mono">y = −x² + 4x − 1</span> trên ℝ.',
+        choices:['3','4','−1','2'], correct:0,
+        hint:"y = −(x−2)² + 3, đạt GTLN bằng 3 tại x = 2." },
+      { html:'Tìm giá trị nhỏ nhất của hàm số <span class="mono">y = x³ − 3x</span> trên đoạn [0; 2].',
+        choices:['0','−2','2','−3'], correct:1,
+        hint:"y' = 3x²−3=0 tại x=1 ∈ [0;2]. So sánh y(0)=0, y(1)=−2, y(2)=2 → GTNN là −2." }
+    ],
+    'tiem-can': [
+      { html:'Đồ thị hàm số <span class="mono">y = (2x + 1)/(x − 3)</span> có tiệm cận đứng là đường thẳng nào?',
+        choices:['x = 3','x = −3','x = 2','y = 2'], correct:0,
+        hint:"Tiệm cận đứng tại nghiệm của mẫu số (không triệt tiêu tử): x − 3 = 0 → x = 3." },
+      { html:'Đồ thị hàm số <span class="mono">y = (3x − 2)/(x + 1)</span> có tiệm cận ngang là đường thẳng nào?',
+        choices:['y = 3','y = −2','x = −1','y = 1'], correct:0,
+        hint:"Bậc tử bằng bậc mẫu → tiệm cận ngang y = tỉ số hệ số bậc cao nhất = 3/1 = 3." }
+    ],
+    'khao-sat': [
+      { html:'Đồ thị hàm số <span class="mono">y = x³ − 3x + 2</span> đi qua điểm nào sau đây?',
+        choices:['(0; 2)','(1; 1)','(2; 0)','(3; −2)'], correct:0,
+        hint:"Thay x=0 vào hàm số: y(0) = 2 → điểm (0; 2)." },
+      { html:'Phương trình <span class="mono">x³ − 3x + 2 = 0</span> có bao nhiêu nghiệm phân biệt?',
+        choices:['1','2','3','0'], correct:1,
+        hint:"Phân tích: x³−3x+2 = (x−1)²(x+2) → hai nghiệm phân biệt x=1 (kép) và x=−2." }
+    ]
+  };
+
+  // =========================================================
   // APP STATE
   // =========================================================
   const state = {
     points: 0,
     streak: 0,
-    courseProgress: { 'pt-bac-nhat': 0 },
-    lessonsDone: { 'be-thuc':false, 'don-thuc':false, 'nhan-don-thuc':false, 'pt-bac-nhat':false, 'an-o-mau':false, 'bpt-bac-nhat':false, 'he-2an':false },
-    mastery: { chuyenve: 0, rutgon: 0 },
-    practice: { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false }
+    lessonsDone: {},
+    mastery: {},
+    currentSubjectId: 'ham-so-dao-ham',
+    currentSkillId: 'don-dieu',
+    practice: { qIndex:0, correctCount:0, streakDots:[], selected:null, checked:false }
   };
-
-  const playlistData = [
-    {id:'be-thuc', label:'Biểu thức đại số', time:'6:10'},
-    {id:'don-thuc', label:'Đơn thức, đa thức', time:'7:45'},
-    {id:'nhan-don-thuc', label:'Nhân đơn thức', time:'5:30'},
-    {id:'pt-bac-nhat', label:'Giải phương trình bậc nhất', time:'8:00'},
-    {id:'an-o-mau', label:'Phương trình chứa ẩn ở mẫu', time:'9:15'},
-    {id:'bpt-bac-nhat', label:'Bất phương trình bậc nhất', time:'7:20'},
-    {id:'he-2an', label:'Hệ hai phương trình', time:'10:40'},
-  ];
-
-  const questionBank = [
-    {
-      html:'Giải phương trình sau và chọn nghiệm đúng: <br><br><span class="mono" style="font-size:20px;">3x − 5 = 2x + 7</span>',
-      choices:['x = 6','x = 9','x = 12','x = 2'],
-      correct:2,
-      hint:'Chuyển 2x sang vế trái và −5 sang vế phải: 3x − 2x = 7 + 5.'
-    },
-    {
-      html:'Tìm nghiệm của phương trình: <br><br><span class="mono" style="font-size:20px;">2(x − 3) = 4x − 10</span>',
-      choices:['x = 1','x = 2','x = 3','x = 4'],
-      correct:1,
-      hint:'Khai triển vế trái trước: 2x − 6 = 4x − 10, rồi chuyển vế.'
-    },
-    {
-      html:'Giải phương trình: <br><br><span class="mono" style="font-size:20px;">5x + 4 = 2x + 19</span>',
-      choices:['x = 3','x = 5','x = 7','x = 9'],
-      correct:1,
-      hint:'Chuyển 2x sang trái, 4 sang phải rồi chia cho hệ số của x.'
-    },
-    {
-      html:'Tìm x biết: <br><br><span class="mono" style="font-size:20px;">7 − 2x = 3x − 8</span>',
-      choices:['x = 1','x = 2','x = 3','x = 4'],
-      correct:2,
-      hint:'Cộng 2x vào hai vế, sau đó cộng 8 vào hai vế.'
-    },
-    {
-      html:'Giải phương trình: <br><br><span class="mono" style="font-size:20px;">4(x + 1) = 2x + 10</span>',
-      choices:['x = 1','x = 2','x = 3','x = 4'],
-      correct:0,
-      hint:'Khai triển: 4x + 4 = 2x + 10, rồi chuyển vế và rút gọn.'
-    }
-  ];
 
   // =========================================================
   // TOAST
@@ -723,7 +754,7 @@
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 2400);
   }
 
   function refreshHeader(){
@@ -739,27 +770,124 @@
     navItems.forEach(b=>b.classList.toggle('active', b.dataset.view===name));
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     document.getElementById('view-'+name).classList.add('active');
+    if(name==='dashboard') renderDashboard();
     if(name==='lesson') renderLesson();
     if(name==='practice') renderPractice();
-    if(name==='tree') renderFullTree();
+    if(name==='tree'){ renderFullTree(); document.getElementById('tree-title').textContent = 'Lộ trình kỹ năng — '+findSubject(state.currentSubjectId).title; }
     window.scrollTo({top:0,behavior:'instant'});
   }
   navItems.forEach(btn=> btn.addEventListener('click', ()=> goToView(btn.dataset.view)));
-
-  document.querySelectorAll('.start-practice').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      state.practice = { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false };
-      goToView('practice');
-    });
+  document.getElementById('goto-practice-btn').addEventListener('click', ()=>{
+    state.practice = { qIndex:0, correctCount:0, streakDots:[], selected:null, checked:false };
+    goToView('practice');
   });
-  document.getElementById('goto-practice-btn').addEventListener('click', ()=> goToView('practice'));
+
+  // =========================================================
+  // SIDEBAR — DANH SÁCH CHUYÊN ĐỀ
+  // =========================================================
+  function subjectProgress(subject){
+    const done = subject.skills.filter(s=>state.lessonsDone[s.id]).length;
+    return { done, total: subject.skills.length, pct: Math.round(done/subject.skills.length*100) };
+  }
+
+  function renderSubjectNav(){
+    const wrap = document.getElementById('subject-nav');
+    wrap.innerHTML = '';
+    SUBJECTS.forEach((subj, i)=>{
+      const btn = document.createElement('button');
+      btn.className = 'nav-item' + (subj.id===state.currentSubjectId ? ' active' : '');
+      btn.innerHTML = `<span style="width:18px;text-align:center;">${subj.icon}</span> Chuyên đề ${i+1}: ${subj.title}`;
+      btn.addEventListener('click', ()=>{
+        state.currentSubjectId = subj.id;
+        state.currentSkillId = subj.skills[0].id;
+        document.querySelectorAll('#subject-nav .nav-item').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        navItems.forEach(b=>b.classList.remove('active'));
+        goToView('tree');
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  // =========================================================
+  // DASHBOARD
+  // =========================================================
+  function renderDashboard(){
+    const subject = findSubject(state.currentSubjectId);
+    const prog = subjectProgress(subject);
+    const nextSkill = subject.skills.find(s=>!state.lessonsDone[s.id]) || subject.skills[0];
+
+    document.getElementById('hero-title').textContent = `Chuyên đề ${SUBJECTS.indexOf(subject)+1}: ${subject.title}`;
+    document.getElementById('hero-sub').textContent = prog.done===prog.total
+      ? `Bạn đã hoàn thành toàn bộ ${prog.total} kỹ năng của chuyên đề này. Xuất sắc!`
+      : `Bạn đã thành thạo ${prog.done}/${prog.total} kỹ năng. Tiếp tục với "${nextSkill.label}" để giữ chuỗi học của mình.`;
+
+    const heroCta = document.getElementById('hero-cta');
+    heroCta.onclick = ()=>{
+      state.currentSkillId = nextSkill.id;
+      goToView('lesson');
+    };
+
+    // stat row
+    const allSkillIds = SUBJECTS.flatMap(s=>s.skills.map(sk=>sk.id));
+    const doneCount = allSkillIds.filter(id=>state.lessonsDone[id]).length;
+    const inProgressCount = allSkillIds.filter(id=>!state.lessonsDone[id] && (state.mastery[id]||0) > 0).length;
+    document.getElementById('stat-done').textContent = doneCount;
+    document.getElementById('stat-progress').textContent = inProgressCount;
+    document.getElementById('stat-points').textContent = state.points.toLocaleString('vi-VN');
+    document.getElementById('stat-streak').textContent = state.streak + ' ngày';
+
+    // subject cards
+    const courseRow = document.getElementById('course-row');
+    courseRow.innerHTML = '';
+    SUBJECTS.forEach((s, i)=>{
+      const p = subjectProgress(s);
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.dataset.search = (s.title + ' chuyên đề ' + (i+1)).toLowerCase();
+      card.innerHTML = `
+        <div class="course-icon" style="background:${TINT[s.color]};font-size:18px;">${s.icon}</div>
+        <h3>Chuyên đề ${i+1}: ${s.title}</h3>
+        <p>${p.done}/${p.total} kỹ năng hoàn thành</p>
+        <div class="progress-track"><div class="progress-fill" style="width:${p.pct}%;background:${p.pct===100?'var(--teal)':'var(--amber)'}"></div></div>
+        <div class="progress-text">${p.pct}% hoàn thành</div>`;
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', ()=>{
+        state.currentSubjectId = s.id;
+        state.currentSkillId = s.skills.find(sk=>!state.lessonsDone[sk.id])?.id || s.skills[0].id;
+        renderSubjectNav();
+        goToView('tree');
+      });
+      courseRow.appendChild(card);
+    });
+
+    // practice suggestions — from chuyên đề 1 skills that have a question bank
+    const suggestRow = document.getElementById('practice-suggest-row');
+    suggestRow.innerHTML = '';
+    const suggestSkills = SUBJECTS[0].skills.filter(sk=>questionBank[sk.id]).slice(0,2);
+    suggestSkills.forEach(sk=>{
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.dataset.search = ('luyện tập ' + sk.label).toLowerCase();
+      card.innerHTML = `
+        <h3>Luyện tập: ${sk.label}</h3>
+        <p>${questionBank[sk.id].length} câu · ~${questionBank[sk.id].length*2} phút</p>
+        <button class="btn-primary start-practice" style="width:100%;justify-content:center;">Bắt đầu</button>`;
+      card.querySelector('.start-practice').addEventListener('click', ()=>{
+        state.currentSkillId = sk.id;
+        state.practice = { qIndex:0, correctCount:0, streakDots:[], selected:null, checked:false };
+        goToView('practice');
+      });
+      suggestRow.appendChild(card);
+    });
+  }
 
   // =========================================================
   // SEARCH FILTER (dashboard course cards)
   // =========================================================
   document.getElementById('search-input').addEventListener('input', (e)=>{
     const q = e.target.value.trim().toLowerCase();
-    document.querySelectorAll('#course-row .course-card, .row .course-card').forEach(card=>{
+    document.querySelectorAll('#course-row .course-card, #practice-suggest-row .course-card').forEach(card=>{
       const hay = (card.dataset.search || card.textContent).toLowerCase();
       card.classList.toggle('filtered-out', q.length>0 && !hay.includes(q));
     });
@@ -769,12 +897,27 @@
   // LESSON VIEW
   // =========================================================
   function renderLesson(){
+    const subject = findSubject(state.currentSubjectId);
+    const idx = skillIndexInSubject(subject, state.currentSkillId);
+    const skill = subject.skills[idx];
+    const content = lessonContent[skill.id];
+
+    document.getElementById('lesson-title').textContent = skill.label;
+    document.getElementById('lesson-meta-time').textContent = '⏱ ' + (content ? content.duration : '— phút');
+    document.getElementById('lesson-meta-subject').textContent = `📘 ${subject.title} · Bài ${idx+1}/${subject.skills.length}`;
+    document.getElementById('lesson-body').innerHTML = content ? content.body : genericLessonBody(skill.label);
+
     const wrap = document.getElementById('playlist');
-    wrap.innerHTML = '<div class="playlist-head">Đại số cơ bản · '+playlistData.length+' bài</div>';
-    let reachedLocked = false;
-    playlistData.forEach((item, i)=>{
-      const done = state.lessonsDone[item.id];
-      const isCurrent = item.id==='pt-bac-nhat';
+    document.getElementById('playlist-head').textContent = `${subject.title} · ${subject.skills.length} bài`;
+    wrap.innerHTML = '';
+    const head = document.createElement('div');
+    head.className = 'playlist-head';
+    head.textContent = `${subject.title} · ${subject.skills.length} bài`;
+    wrap.appendChild(head);
+
+    subject.skills.forEach((sk, i)=>{
+      const done = state.lessonsDone[sk.id];
+      const isCurrent = sk.id === state.currentSkillId;
       let iconClass, iconInner='';
       if(done){ iconClass='check-done'; iconInner='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M4 12l6 6L20 6"/></svg>'; }
       else if(isCurrent){ iconClass='check-current'; }
@@ -782,41 +925,33 @@
 
       const row = document.createElement('div');
       row.className = 'playlist-item' + (isCurrent ? ' current' : '');
-      row.innerHTML = `<span class="check-icon ${iconClass}">${iconInner}</span> ${item.label} <span class="pl-time">${item.time}</span>`;
+      row.style.cursor = 'pointer';
+      row.innerHTML = `<span class="check-icon ${iconClass}">${iconInner}</span> ${sk.label} <span class="pl-time">${lessonContent[sk.id] ? lessonContent[sk.id].duration : '—'}</span>`;
+      row.addEventListener('click', ()=>{ state.currentSkillId = sk.id; renderLesson(); window.scrollTo({top:0,behavior:'instant'}); });
       wrap.appendChild(row);
     });
+
     const btn = document.getElementById('mark-done-btn');
-    const done = state.lessonsDone['pt-bac-nhat'];
-    btn.textContent = done ? '✓ Đã học xong' : 'Đánh dấu đã học xong';
-    btn.disabled = done;
+    const isDone = state.lessonsDone[skill.id];
+    btn.textContent = isDone ? '✓ Đã học xong' : 'Đánh dấu đã học xong';
+    btn.disabled = isDone;
   }
 
   document.getElementById('mark-done-btn').addEventListener('click', async ()=>{
-    if(state.lessonsDone['pt-bac-nhat']) return;
+    if(state.lessonsDone[state.currentSkillId]) return;
     try{
-      const data = await api('/api/lesson/complete', { method:'POST', body: JSON.stringify({ lessonId:'pt-bac-nhat' }) });
-      Object.assign(state, {
-        points: data.state.points,
-        courseProgress: data.state.courseProgress,
-        lessonsDone: data.state.lessonsDone
-      });
+      const data = await api('/api/lesson/complete', { method:'POST', body: JSON.stringify({ skillId: state.currentSkillId }) });
+      state.points = data.state.points;
+      state.lessonsDone = data.state.lessonsDone;
       refreshHeader();
-      updateCourseProgressUI();
       renderLesson();
       renderHeroMap();
+      renderSubjectNav();
       showToast('Đã hoàn thành bài giảng · +20 điểm (đã lưu)');
     }catch(err){
       showToast('Lỗi: '+err.message);
     }
   });
-
-  function updateCourseProgressUI(){
-    const pct = state.courseProgress['pt-bac-nhat'];
-    const fill = document.getElementById('progress-pt-bac-nhat');
-    const text = document.getElementById('progress-text-pt-bac-nhat');
-    if(fill){ fill.style.width = pct+'%'; }
-    if(text){ text.textContent = pct; }
-  }
 
   // =========================================================
   // PRACTICE VIEW
@@ -827,48 +962,76 @@
     return {text:'Mới bắt đầu', color:'var(--coral)'};
   }
 
-  function renderStreakDots(){
+  function renderStreakDots(total){
     const wrap = document.getElementById('streak-mini');
     wrap.innerHTML = '';
-    state.practice.streakDots.forEach(filled=>{
+    for(let i=0;i<total;i++){
       const d = document.createElement('div');
-      d.className = 'streak-dot' + (filled ? ' filled' : '');
+      d.className = 'streak-dot' + (state.practice.streakDots[i] ? ' filled' : '');
       wrap.appendChild(d);
-    });
+    }
   }
 
   function renderMasterySide(){
-    const m1 = masteryLabel(state.mastery.chuyenve);
+    const skill = findSubject(state.currentSubjectId).skills.find(s=>s.id===state.currentSkillId);
+    document.getElementById('mastery-label').textContent = skill.label;
+    const m = masteryLabel(state.mastery[state.currentSkillId] || 0);
     const el = document.getElementById('mastery-1');
-    el.textContent = m1.text;
-    el.style.color = m1.color;
+    el.textContent = m.text;
+    el.style.color = m.color;
   }
 
   function renderPractice(){
-    renderStreakDots();
-    renderMasterySide();
     const card = document.getElementById('practice-card');
-    const total = questionBank.length;
+    const questions = questionBank[state.currentSkillId];
+    const skill = findSubject(state.currentSubjectId).skills.find(s=>s.id===state.currentSkillId);
 
-    if(state.practice.qIndex >= total){
+    if(!questions){
+      document.getElementById('streak-mini').innerHTML = '';
+      renderMasterySide();
       card.innerHTML = `
         <div class="results-wrap">
-          <div class="results-num">${state.practice.correctCount}/${total}</div>
-          <p style="color:var(--ink-soft);font-size:14.5px;margin:10px 0 24px;">Bạn đã hoàn thành bộ luyện tập "Phương trình bậc nhất".</p>
-          <button class="btn-primary" id="retry-btn" style="margin:0 auto;">Luyện tập lại</button>
+          <div style="font-size:40px;margin-bottom:10px;">🚧</div>
+          <p style="color:var(--ink-soft);font-size:14.5px;margin:0 0 20px;">Bộ câu hỏi luyện tập cho "<b>${skill.label}</b>" đang được biên soạn và sẽ sớm ra mắt.</p>
+          <button class="btn-primary" id="back-to-hsdh" style="margin:0 auto;">Luyện tập "Tính đơn điệu" ngay</button>
         </div>`;
-      document.getElementById('retry-btn').addEventListener('click', ()=>{
-        state.practice = { qIndex:0, correctCount:0, streakDots:[false,false,false,false,false], selected:null, checked:false };
+      document.getElementById('back-to-hsdh').addEventListener('click', ()=>{
+        state.currentSubjectId = 'ham-so-dao-ham';
+        state.currentSkillId = 'don-dieu';
+        state.practice = { qIndex:0, correctCount:0, streakDots:[], selected:null, checked:false };
+        renderSubjectNav();
         renderPractice();
       });
       return;
     }
 
-    const q = questionBank[state.practice.qIndex];
+    if(state.practice.streakDots.length !== questions.length){
+      state.practice.streakDots = new Array(questions.length).fill(false);
+    }
+    renderStreakDots(questions.length);
+    renderMasterySide();
+    const total = questions.length;
+
+    if(state.practice.qIndex >= total){
+      card.innerHTML = `
+        <div class="results-wrap">
+          <div class="results-num">${state.practice.correctCount}/${total}</div>
+          <p style="color:var(--ink-soft);font-size:14.5px;margin:10px 0 24px;">Bạn đã hoàn thành bộ luyện tập "${skill.label}".</p>
+          <button class="btn-primary" id="retry-btn" style="margin:0 auto;">Luyện tập lại</button>
+        </div>`;
+      document.getElementById('retry-btn').addEventListener('click', ()=>{
+        state.practice = { qIndex:0, correctCount:0, streakDots:new Array(total).fill(false), selected:null, checked:false };
+        renderPractice();
+      });
+      return;
+    }
+
+    const q = questions[state.practice.qIndex];
     const letters = ['A','B','C','D'];
+    const subject = findSubject(state.currentSubjectId);
     card.innerHTML = `
       <div class="practice-top">
-        <span class="practice-pill">Phương trình bậc nhất</span>
+        <span class="practice-pill">${skill.label}</span>
         <span class="q-counter">Câu ${state.practice.qIndex+1} / ${total}</span>
       </div>
       <div id="feedback-slot"></div>
@@ -921,13 +1084,12 @@
       if(!isCorrect) choices[state.practice.selected].classList.add('incorrect');
 
       const slot = document.getElementById('feedback-slot');
-      const dots = state.practice.streakDots;
-      dots[state.practice.qIndex] = isCorrect;
-      renderStreakDots();
+      state.practice.streakDots[state.practice.qIndex] = isCorrect;
+      renderStreakDots(total);
 
       checkBtn.disabled = true;
       try{
-        const data = await api('/api/practice/answer', { method:'POST', body: JSON.stringify({ correct: isCorrect }) });
+        const data = await api('/api/practice/answer', { method:'POST', body: JSON.stringify({ skillId: state.currentSkillId, correct: isCorrect }) });
         state.points = data.state.points;
         state.mastery = data.state.mastery;
       }catch(err){
@@ -951,7 +1113,6 @@
   // SKILL MAP (signature element) — clickable nodes
   // =========================================================
   function ringPath(cx, cy, r, pct){
-    // returns SVG path for a progress arc
     const start = -90;
     const end = start + pct*3.6;
     const toXY = (deg)=>{
@@ -971,7 +1132,6 @@
     const colorFor = (status)=> status==='done' ? '#1F8A82' : status==='active' ? '#F2A339' : '#C7D2DE';
     const bgFor = (status)=> status==='done' ? '#E4F3F1' : status==='active' ? '#FCF0DC' : '#F3F5F8';
 
-    // edges first (behind nodes)
     edges.forEach(([a,b])=>{
       const n1 = nodes[a], n2 = nodes[b];
       const line = document.createElementNS(ns,'line');
@@ -1030,7 +1190,6 @@
         label.setAttribute('font-size','11.5px');
         label.setAttribute('font-family','Inter');
         label.setAttribute('fill', '#4A5A78');
-        // wrap simple: split by space, two lines max
         const words = n.label.split(' ');
         const mid = Math.ceil(words.length/2);
         const l1 = words.slice(0,mid).join(' ');
@@ -1055,6 +1214,7 @@
         } else if(n.status==='done'){
           showToast('Bạn đã thành thạo "'+n.label+'" — 100%');
         } else {
+          state.currentSkillId = n.skillId;
           showToast('Mở bài giảng "'+n.label+'"');
           goToView('lesson');
         }
@@ -1063,35 +1223,49 @@
     });
   }
 
-  // compact hero map
+  // ---- Xây dựng các nút của bản đồ kỹ năng từ chuyên đề hiện tại ----
   function buildSkillNodes(){
-    const ptPct = state.courseProgress['pt-bac-nhat'];
-    return [
-      {x:40,y:110,status:'done',pct:100,symbol:'+',label:'Biểu thức'},
-      {x:150,y:70,status:'done',pct:100,symbol:'×',label:'Đơn thức'},
-      {x:150,y:150,status:'done',pct:100,symbol:'÷',label:'Đa thức'},
-      {x:270,y:110,status: ptPct>=100?'done':'active',pct:ptPct,symbol:'x',label:'Phương trình bậc nhất'},
-      {x:390,y:60,status:'active',pct:30,symbol:'△',label:'Hệ phương trình'},
-      {x:390,y:160,status:'locked',pct:0,symbol:'≠',label:'Bất phương trình'},
-      {x:510,y:110,status:'locked',pct:0,symbol:'f',label:'Hàm số bậc nhất'},
-      {x:630,y:70,status:'locked',pct:0,symbol:'∠',label:'Đồ thị hàm số'},
-      {x:630,y:150,status:'locked',pct:0,symbol:'∑',label:'Hệ hai ẩn'},
-      {x:750,y:110,status:'locked',pct:0,symbol:'★',label:'Ứng dụng thực tế'},
-    ];
+    const subject = findSubject(state.currentSubjectId);
+    const n = subject.skills.length;
+    const spacing = 120;
+    return subject.skills.map((sk, i)=>{
+      const done = state.lessonsDone[sk.id];
+      let status;
+      if(done) status = 'done';
+      else {
+        const prevDone = i===0 || state.lessonsDone[subject.skills[i-1].id];
+        status = prevDone ? 'active' : 'locked';
+      }
+      return {
+        x: 60 + i*spacing,
+        y: 110 + (i%2===0 ? 0 : 40),
+        status,
+        pct: done ? 100 : (state.mastery[sk.id] || 0),
+        symbol: sk.symbol,
+        label: sk.label,
+        skillId: sk.id
+      };
+    });
   }
-  const heroEdges = [[0,1],[0,2],[1,3],[2,3],[3,4],[3,5],[4,6],[5,6],[6,7],[6,8],[7,9],[8,9]];
+  function buildSkillEdges(nodeCount){
+    const edges = [];
+    for(let i=0;i<nodeCount-1;i++) edges.push([i,i+1]);
+    return edges;
+  }
 
   function renderHeroMap(){
-    drawSkillMap('skillmap', buildSkillNodes(), heroEdges, false);
+    const nodes = buildSkillNodes();
+    drawSkillMap('skillmap', nodes, buildSkillEdges(nodes.length), false);
   }
   function renderFullTree(){
-    const fullNodes = buildSkillNodes().map(n=>({...n, x:n.x*1.15+20, y:n.y*1.6+40}));
-    drawSkillMap('skillmap-full', fullNodes, heroEdges, true);
+    const nodes = buildSkillNodes().map(n=>({...n, x:n.x*1.3+40, y:n.y*1.6+40}));
+    drawSkillMap('skillmap-full', nodes, buildSkillEdges(nodes.length), true);
   }
 
   // =========================================================
   // INIT
   // =========================================================
+  renderSubjectNav();
   tryResumeSession();
 </script>
 </body>
